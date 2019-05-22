@@ -34,8 +34,3 @@ The first two mentioned scripts are the user interface of our tool. However, we 
 \textit{Udpfloodpcap.pig} calculates the mean velocity of every machine given a dataset in input. This is the core of the analysis tool: it uses Pig Latin mapreduce paradigm. The script loads the dataset, filter the records having UDP protocol, and group them by \textit{(source\_ip, destination\_ip)} tuple. At this point we have to handle a list of \textit{map(tuple, bag)} containing all the corresponding packets sent by a machine. We can then calculate the number of packets (counting the elements in the bag), the total volume exchanged by a particular machine (summing up the corresponding data for each element of the bag) and the mean velocity in bps (using the total volume divided by the max time minus the min time). This is a crucial factor which we use to discriminate good and evil users.
 
 
-
-
-
-
-
