@@ -42,6 +42,11 @@ We choose this type of network configuration in order to concentrate our heed on
 \subsection{DoS Analysis Example}
 
 \subsection{DDoS Analysis Example}
+DDoS is a popular approach for attackers to paralyse computers or network systems by coordinating flooding traffic originated from multiple hosts simultaneously, to block legitimate users' system access by reducing resource availability. DDoS attack inherits similar characteristics of DoS attacks, with the differences in an increased scale which in term yields a higher impact\cite{ddos_forensics}.
+
+In our attack scenario, fig. \ref{fig:DDoS},  the attacker controls a botnet of forty devices capable to generate a traffic volume to our server of 1 GB/s. By using \textit{UDP flood} attack the botmaster unleash his botnet against the server for four seconds overwhelming it. Launching our analysis tool, thanks to its big data features, we are capable to deal with the \texttt{ddos\_log} file easily.
+
+The analysis results are shown in fig. \ref{fig:ddos_analysis}, as we can see there are two  visible clusters, one of legitimate users and one of attacker. We can easily recognise attackers from legitimate users because the data exchanged in terms of KB is very low (fig. \ref{fig:ddos_data}) but on the other hand volume of data exchanged in therms of KB over seconds are high respect the average of norma traffic on the server in normal conditions. Our tool output also a dataset which contains the IP and all the statistics previously mentioned, in this dataset we can retrive the ip of the attacker by its id which is used to identify it into the output figures. 
 
 
 
@@ -54,8 +59,21 @@ We choose this type of network configuration in order to concentrate our heed on
 
 
 
-
-
+\begin{figure*}[h]
+	\begin{subfigure}{0.48\textwidth}
+		\includegraphics[width=\textwidth]{imgs/ddos_atk-data_analysis.png}
+		\caption{DoS Data Analysis} 
+		\label{fig:ddos_data}
+	\end{subfigure}
+	\hspace*{\fill} % separation between the subfigures
+	\begin{subfigure}{0.48\textwidth}
+		\includegraphics[width=\textwidth]{imgs/ddos_atk-volume_analysis.png}
+		\caption{DDoS Volume Analysis} 
+		\label{fig:ddos_volume}
+	\end{subfigure}
+	\caption{DDoS attack Analysis}
+	\label{fig:ddos_analysis}
+\end{figure*}
 
 
 
