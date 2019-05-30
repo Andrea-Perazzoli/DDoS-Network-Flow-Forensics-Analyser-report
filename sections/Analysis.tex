@@ -28,7 +28,7 @@ This tool has been developed for running analysis over network flow records with
 \begin{lstlisting}[firstline=1, lastline=1]
    python3 DDoSAnalysis.py -a dataset_name
 	Write('Case insensitive '); 
-	WritE('Bash keywords.')
+	Write('Bash keywords.')
 \end{lstlisting}
 
 \subsection{Scenario} 
@@ -41,6 +41,39 @@ We choose this type of network configuration in order to concentrate our heed on
 
 
 \subsection{DoS Analysis Example}
+A DoS attack is a common way to saturate the server bandwidth. It's often used in combination with other vulnerabilities to amplificate the DoS traffic volume, as we have seen in the wild with the Memcached vulnerability\cite{memcached_vulnerability}. In our example, we don't consider the possibility to track the real culprit behind a proxy.
+In our PoC we generated a dataset with the following configuration
+\begin{center}
+\begin{tabular}{ |c|c|c| } 
+ \hline
+ Number of users & 100 \\ 
+ Number of lines & 20000000 \\ 
+ Number of attackers & 1 \\ 
+ Attack volume & 1 Gbit \\
+ Attack duration & 1 second \\  
+ \hline
+\end{tabular}
+\end{center}
+and we started our analysis. \\
+
+\begin{figure*}[h]
+	\begin{subfigure}{0.48\textwidth}
+		\includegraphics[scale=0.30]{imgs/atk_1-data_analysis}
+  		\caption{Data volume exchanged in atk\_1 dataset}
+  		\label{fig:atk1datavolumeexchanged}
+	\end{subfigure}
+	\hspace*{\fill} % separation between the subfigures
+	\begin{subfigure}{0.48\textwidth}
+  		\includegraphics[scale=0.30]{imgs/atk_1-volume_analysis}
+  		\caption{Traffic volume exchanged in atk\_1 dataset}
+  		\label{fig:atk1trafficvolumeexchanged}
+	\end{subfigure}
+	\caption{Attacks scenarios}
+	\label{fig:atk_1}
+\end{figure*}
+
+
+We can immediately see in Figure \ref{fig:atk1datavolumeexchanged} and \ref{fig:atk1trafficvolumeexchanged} how the attacker with \textit{id 0} is immediately recognized because of a small amount of traffic volume compared to a large spike in packet speed. Here, in the two graphs, we can see the mean value, represented in a red line: the attacker squared root margin from the sigma value is also more accentuated in both graphs, which suggests an involvement in the DoS genesis.
 
 \subsection{DDoS Analysis Example}
 
