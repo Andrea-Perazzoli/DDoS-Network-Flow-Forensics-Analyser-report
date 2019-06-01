@@ -26,7 +26,7 @@ We choose this type of network configuration in order to concentrate our heed on
  
 \subsection{DoS Analysis Example}
 A DoS attack is a common way to saturate the server bandwidth. It's often used in combination with other vulnerabilities to amplificate the DoS traffic volume, as we have seen in the wild with the Memcached vulnerability\cite{memcached_vulnerability}. In our example, fig. \ref{fig:DoS}, we don't consider the possibility to track the real culprit behind a proxy.
-In our PoC we generated a dataset with the configuration in \ref{tab:tab:dos_config} and we started our analysis.
+In our PoC we generated a dataset with the configuration in Table \ref{tab:tab:dos_config} and we started our analysis.
 
 \begin{table}[h]
 \centering
@@ -78,7 +78,7 @@ The analysis results are shown in fig. \ref{fig:ddos_analysis}, as we can see th
 \begin{figure*}[h]
 	\begin{subfigure}{0.48\textwidth}
 		\includegraphics[width=\textwidth]{imgs/ddos_atk-data_analysis.png}
-		\caption{DoS Data Analysis} 
+		\caption{DDoS Data Analysis} 
 		\label{fig:ddos_data}
 	\end{subfigure}
 	\hspace*{\fill} % separation between the subfigures
