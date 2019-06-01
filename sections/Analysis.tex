@@ -17,13 +17,7 @@ The scenario we focusing on is illustrated in fig.\ref{fig:networkscenario}, as 
 In this scene common users exchange with the server at least 650 MB, the upper bound is $800$ MB with an average speed of $2.2$ Kb/s during the user server connection lifecycle. These data comes from an analysis in normal\footnote{Dataset generated without attackers in order to get an estimation of normal traffic conditions.} server condition, these assumptions are based on a \textit{log} file with a pool of one hundred users. As we will se further this assumption is the ground truth for our analysis under attacks condition.
 
 We choose this type of network configuration in order to concentrate our heed on the implementation of analysis tools and big data scripting, which are the main topics of this project.
- 
-\begin{figure}[ht]
-  \includegraphics[scale=0.31]{imgs/scenario.png}
-  \caption{Network Scenario}
-  \label{fig:networkscenario}
-\end{figure} 
- 
+  
 \subsection{DoS Analysis Example}
 A DoS attack is a common way to saturate the server bandwidth. It's often used in combination with other vulnerabilities to amplificate the DoS traffic volume, as we have seen in the wild with the Memcached vulnerability\cite{memcached_vulnerability}. In our example, fig. \ref{fig:DoS}, we don't consider the possibility to track the real culprit behind a proxy.
 In our PoC we generated a dataset with the configuration in \ref{tab:tab:dos_config} and we started our analysis.
@@ -52,12 +46,6 @@ DDoS is a popular approach for attackers to paralyse computers or network system
 In our attack scenario, fig. \ref{fig:DDoS},  the attacker controls a botnet of forty devices capable to generate a traffic volume to our server of 1 GB/s. By using \textit{UDP flood} attack the botmaster unleash his botnet against the server for four seconds overwhelming it. Launching our analysis tool, thanks to its big data features, we are capable to deal with the \texttt{ddos\_log} file easily.
 
 The analysis results are shown in fig. \ref{fig:ddos_analysis}, as we can see there are two  visible clusters, one of legitimate users and one of attacker. We can easily recognise attackers from legitimate users because the data exchanged in terms of KB is very low (fig. \ref{fig:ddos_data}) but on the other hand volume of data exchanged in therms of KB over seconds are high respect the average of norma traffic on the server in normal conditions. Our tool output also a dataset which contains the IP and all the statistics previously mentioned, in this dataset we can retrive the ip of the attacker by its id which is used to identify it into the output figures. 
-
-
-
-
-
-
 
 \begin{figure*}[h]
 	\begin{subfigure}{0.48\textwidth}
@@ -90,9 +78,3 @@ The analysis results are shown in fig. \ref{fig:ddos_analysis}, as we can see th
 	\caption{DDoS attack Analysis}
 	\label{fig:ddos_analysis}
 \end{figure*}
-
-
-
-
-
-
