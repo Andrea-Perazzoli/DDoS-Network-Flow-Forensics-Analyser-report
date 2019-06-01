@@ -1,6 +1,6 @@
 \section{Performance Analysis}
 In our tool we have developer a \textit{script} which records timestamps and duration time of big data analysis in a \texttt{.csv} file, called \texttt{PerformanceHistory.csv}. The \textit{script} mentioned before is used in order to figure out the time of analysis. 
-The environment in which we tested our tool is a cluster of the University of Verona, running Ubuntu 18.04.1 LTS, it has an Intel Xeon Processor Skylake and a memory of 7880 MiB. 
+The environment in which we tested our tool is a cluster of the University of Verona, running Ubuntu 18.04.1 LTS, it has an Intel Xeon Processor Skylake (4 cores @ 2,6 GHz) and a RAM memory of 7880 MiB. We have never observed a total usage of more of 10\% CPU using \texttt{top} command and, in general, memory usage is often below 3000 MiB.
 
 Using our script called \texttt{PerformanceAnalysis.py} we managed to plot the time elapsed to generate and analyze the datasets listed into Tab. \ref{tab:dataset_info}: results are reported into Fig. \ref{fig:datasets_statistics}.
 We can immediately see that the generation time is much greater for attack datasets: this is justifiable because of the greater size, considering multi-user disk accesses.
