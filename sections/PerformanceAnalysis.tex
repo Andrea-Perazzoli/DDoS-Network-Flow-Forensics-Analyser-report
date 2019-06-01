@@ -1,3 +1,16 @@
 \section{Performance Analysis}
 In our tool we have developer a \textit{script} which records timestamps and duration time of big data analysis in a \texttt{.csv} file, called \texttt{PerformaceHistory}. The \textit{script} mentioned before is used in order to figure out the time of analysis. 
 The environment in which we tested our tool is a cluster of the University of Verona, running Ubuntu 18.04.1 LTS, it has an  Intel Xeon Processor (Skylake, IBRS) and a memory of 7880 MiB. 
+
+\begin{table}[h]
+\centering
+\begin{tabular}{|l|l|c|}
+\hline
+\textbf{Dataset} & \textbf{Description}                              & \textbf{Size} \\ \hline
+no\_atk          & Traffic log in normal conditions, no attacks. & 1.3 GB        \\ 
+dos\_atk         & Traffic log during a DoS attack.                   & 1.6 GB        \\ 
+ddos\_atk        & Traffic log during a DoS attack with 40 bots. & 1.6 GB        \\ \hline
+\end{tabular}
+\caption{Datasets Info}
+\label{tab:dataset_info}
+\end{table}
