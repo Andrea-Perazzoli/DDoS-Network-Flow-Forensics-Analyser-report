@@ -1,6 +1,26 @@
 \section{Performance Analysis}
 In our tool we have developer a \textit{script} which records timestamps and duration time of big data analysis in a \texttt{.csv} file, called \texttt{PerformanceHistory.csv}. The \textit{script} mentioned before is used in order to figure out the time of analysis. 
-The environment in which we tested our tool is a cluster of the University of Verona, running Ubuntu 18.04.1 LTS, it has an Intel Xeon Processor (Skylake, IBRS) and a memory of 7880 MiB. 
+The environment in which we tested our tool is a cluster of the University of Verona, running Ubuntu 18.04.1 LTS, it has an Intel Xeon Processor Skylake and a memory of 7880 MiB. 
+
+Using our script called \texttt{PerformanceAnalysis.py} we managed to plot the time elapsed to generate and analyze the datasets listed into Tab. \ref{tab:dataset_info}: results are reported into Fig. \ref{fig:datasets_statistics}.
+We can immediately see that the generation time is much greater for attack datasets: this is justifiable because of the greater size, considering multi-user disk accesses.
+Talking about analysis statistics, we can see a spike in \textit{ddos\_atk} and \textit{no\_atk} datasets. Here, long cluster timeouts during Pig Latin script execution play a great role, and we cannot have much control over it. Without that problem, analysis of the datasets would have taken much less time.
+
+\begin{figure}[H]
+	\begin{subfigure}{0.24\textwidth}
+		\includegraphics[width=\textwidth]{imgs/analysis_stat.png}
+		\caption{Analysis} 
+		\label{fig:analysis_stats}
+	\end{subfigure}
+	\hspace*{\fill} % separation between the subfigures
+	\begin{subfigure}{0.24\textwidth}
+		\includegraphics[width=\textwidth]{imgs/generation_stat.png}
+		\caption{Generation} 
+		\label{fig:generation_stats}
+	\end{subfigure}
+	\caption{Datasets Statistics}
+	\label{fig:datasets_statistics}
+\end{figure}
 
 \begin{table}[h]
 \centering
@@ -14,25 +34,3 @@ ddos\_atk        & Traffic log during a DDoS attack with 40 bots. & 1.6 GB      
 \caption{Datasets Info}
 \label{tab:dataset_info}
 \end{table}
-
-\begin{figure*}[h]
-	\begin{subfigure}{0.48\textwidth}
-		\includegraphics[width=\textwidth]{imgs/analysis_stat.png}
-		\caption{Datasets analysis data statistics} 
-		\label{fig:analysis_stats}
-	\end{subfigure}
-	\hspace*{\fill} % separation between the subfigures
-	\begin{subfigure}{0.48\textwidth}
-		\includegraphics[width=\textwidth]{imgs/generation_stat.png}
-		\caption{Datasets generation data statistics} 
-		\label{fig:generation_stats}
-	\end{subfigure}
-	\caption{Datasets statistics}
-	\label{fig:datasets_statistics}
-\end{figure*}
-
-Using our script called \texttt{PerformanceAnalysis.py} we managed to plot the time elapsed to generate and analyze the datasets listed into Tab. \ref{tab:dataset_info}: results are reported into Fig. \ref{fig:datasets_statistics}. \\
-We can immediately see that the generation time is much greater for attack datasets: this is justifiable because of the greater size, considering multi-user disk accesses.
-Talking about analysis statistics, we can see a spike in \textit{ddos\_atk} and \textit{no\_atk} datasets. Here, long cluster timeouts during Pig Latin script execution play a great role, and we cannot have much control over it. Without that problem, analysis of the datasets would have taken much less time.
-
-
