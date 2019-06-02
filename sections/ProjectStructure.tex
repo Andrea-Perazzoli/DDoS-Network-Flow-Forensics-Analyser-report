@@ -19,14 +19,14 @@
 \end{figure*}
 
 \section{Project structure and implementation}
-Our project and its source code is freely downloadable on \href{https://github.com/CristianTuretta/DDoS-Network-Flow-Forensics-Analyser-.git}{Github}. Here, we focused on the UDP flood D(D)oS analysis of pcap records: the goal is to point out good and evil users given a pcap network sniff file converted to csv format. The project is a multi-layered tool which primarly consists in two executable Python 3 scripts:
+Our project and its source code is freely downloadable on \href{https://github.com/CristianTuretta/DDoS-Network-Flow-Forensics-Analyser-.git}{Github}. Here, we focused on the UDP flood D(D)oS analysis of pcap records: the goal is to point out good and evil users given a pcap network sniff file converted to csv format. The project is a multi-layered tool which primarily consists in two executable Python 3 scripts:
 
 \subsection{DDoSAnalysis}
 \textit{DDoSAnalysis.py} can be used in two different modes, depending on the line parameters used: 
 	\begin{itemize}
 		\item \textit{-g dataset\_name n\_members n\_lines n\_attackers atk\_volume atk\_duration} \\Generates a random, bogus dataset in the current working directory with the name specified in the second argument, alongside with the number of normal network users specified in \textit{n\_members} argument, the dimension of the dataset (in lines), the number of infected machines, the attack volume (per packet) and its duration. At the end of the generation process, it copies the dataset into the Hadoop File System. We assumed that Hadoop is installed and a folder tree under \path{hdfs://user/your_user/project/input} exists.
 		\item \textit{-a dataset\_name} \\ Begin the analysis of the dataset \textit{dataset\_name} using a Pig script. In order to work, the dataset must have been previously copied into the Hadoop input folder, which automatically happens if the dataset is generated using \textit{-g} option. It saves the elaborated dataset under \path{outputs/dataset_name} with an image consisting of a plot of every agent average velocity (Mbps), an attack volume graph and a statistical image which shows the squared margin to mean velocity.
-		\item \textit{-anp dataset\_name} \\ It's like the \textit{-a}argument, but it doesn't start Pig analysis. It's used when we have already completed a Pig analysis, and we only want to aggregate data and obtain the plots. 
+		\item \textit{-anp dataset\_name} \\ It's like the \textit{-a} argument, but it doesn't start Pig analysis. It's used when we have already completed a Pig analysis, and we only want to aggregate data and obtain the plots. 
 		\item \textit{-ga dataset\_name n\_members n\_lines n\_attackers atk\_volume atk\_duration} \\ Launches both the generation and the analysis
 		\item \textit{-sga dataset\_name n\_members n\_lines n\_attackers atk\_volume atk\_duration} \\ Launches both the generation and the analysis. After generation but before the Pig analysis, it prints an estimation of the dataset dimension, letting the user choose whether to proceed or not.
 	\end{itemize}
