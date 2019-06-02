@@ -1,0 +1,11 @@
+\section{Background}
+In this section we are introducing the big data framework at the basis of our project, the following paragraphs are useful in order to give a short description and explanation of what we used.  
+During project's planning stage, unlike \cite{ddos_forensics} we use \textit{Pig Latin} instead of Java \textit{Map Reduce} because for our purpose it fits better as we are going to understand later on this section. 
+
+\textbf{Apache Pig} is a platform for analysing large datasets. Pig's language, \textit{Pig Latin}, lets you specify a sequence of data transformations such as merging data sets, filtering them, and applying functions to records or groups of records. Pig comes with many built-in functions but you can also create your own user-defined functions to do special-purpose processing.
+Pig Latin programs run in a distributed fashion on a cluster, programs are complied into \textbf{Map Reduce} jobs and executed using Hadoop \cite{pig_wiki}.
+
+\textbf{Map Reduce} is a programming model for expressing distributed computations on massive amounts of data and an execution framework for large-scale data processing on clusters of commodity servers. The only feasible approach to tackling large-data problems today is to divide and conquer, the basic idea is to partition a large problem into smaller sub-problems. To the extent that the sub-problems are independent, they can be tackled in parallel by different workers  threads in a processor core, cores in a multi-core processor, multiple processors in a machine, or many machines in a cluster. Intermediate results from each individual worker are then combined to yield the final output.
+The general principles behind divide-and-conquer algorithms are broadly applicable to a wide range of problems in many different application domains. One of the most significant advantages of MapReduce is that it provides an abstraction that hides many system-level details from the programmer \cite{jimmy_lin}.
+
+Pig Latin abstracts the programming from the Java MapReduce idiom into a notation which makes MapReduce programming high level, similar to that of SQL for relational database management systems.
