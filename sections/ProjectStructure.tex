@@ -19,7 +19,8 @@
 \end{figure*}
 
 \section{Project structure and implementation}
-Our project and its source code is freely downloadable on \href{https://github.com/CristianTuretta/DDoS-Network-Flow-Forensics-Analyser-.git}{Github}. Here, we focused on the UDP flood D(D)oS analysis of pcap records: the goal is to point out good and evil users given a pcap network sniff file converted to csv format. The project is a multi-layered tool which primarily consists in two executable Python 3 scripts:
+\label{sec:projstruct}
+Our project \cite{proj_repo} and its source code is freely downloadable on \href{https://github.com/CristianTuretta/DDoS-Network-Flow-Forensics-Analyser-.git}{Github}. Here, we focused on the UDP flood D(D)oS analysis of \texttt{.pcap} records: the goal is to point out good and evil users given a \texttt{.pcap} network sniff file converted to \texttt{.csv} format. The project is a multi-layered tool which primarily consists in two executable Python 3 scripts:
 
 \subsection{DDoSAnalysis}
 \textit{DDoSAnalysis.py} can be used in two different modes, depending on the line parameters used: 
@@ -48,7 +49,7 @@ The first two mentioned scripts are the user interface of our tool. However, we 
 \textit{DatasetGenerator.py} contains the core generation routine of datasets. It generates a pool of innocent IPs and an attackers' one, then it fills line-by-line the dataset with random and bogus informations, extracting random users and attackers. It saves a csv file in the format: \textit{id, time, source\_ip, dest\_ip, protocol, packet\_size, payload}
 
 \subsection{Evaluator} 
-\textit{Evaluator.py} exposes the main routine which processes the Pig script output. It computes the mean velocity of all users, and then produces a plot consisting of the velocity of every single user, represented with a blue line, previously calculated by the Pig script (\textit{udpfloodpcap.pig}) and the mean velocity of all users, represented with a red line. The data scientist could distinguish between evil and good users just looking at the deviation from the average. It also plots a volume comparison graph between users and the squared margin to mean velocity.
+\textit{Evaluator.py} exposes the main routine which processes the Pig script output. It computes the mean velocity of all users, and then produces a plot consisting of the velocity of every single user, represented with a blue line, previously calculated by the Pig script (\textit{udpfloodpcap.pig}) and the mean velocity of all users, represented with a red line. The data scientist could distinguish between evil and good users just looking at the deviation from the average. It also plots a volume comparison graph between users and data margin to mean.
 
 \subsection{Pig script}
 \textit{Udpfloodpcap.pig} calculates the mean velocity of every machine given a dataset in input. This is the core of the analysis tool: it uses Pig Latin mapreduce paradigm. The script loads the dataset, filter the records having UDP protocol, and group them by \textit{(source\_ip, destination\_ip)} tuple. At this point we have to handle a list of \textit{map(tuple, bag)} containing all the corresponding packets sent by a machine. We can then calculate the number of packets (counting the elements in the bag), the total volume exchanged by a particular machine (summing up the corresponding data for each element of the bag) and the mean velocity in bps (using the total volume divided by the max time minus the min time). This is a crucial factor which we use to discriminate good and evil users.
