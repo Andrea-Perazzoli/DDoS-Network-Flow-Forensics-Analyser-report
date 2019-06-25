@@ -1,6 +1,31 @@
-\section{Mathematical Model}
+\section{Mathematical Models}
 \label{sec:mathmodel}
-Based on data volume rates, we do need mathematical models to identify which are the source addresses that may be proponents of an attack. Since we categorise data, using big data framework in order to analyse log files and generate, for simplicity we explain each field by referring to a single entry which represents an exchange between a source IP and server.
+Based on data volume rates, we do need mathematical models to identify which are the source addresses that may be proponents of an attack. 
+In letterature we found different approaches, \cite{detection_by_path_analaysis} categorise data into predictable and non predictable data, their mathematical models must be able judge the data by using a threshold. These possible models are the tools for self-similarity analysis such as correlation coefficient and distance matrix. They \cite{detection_by_path_analaysis} use \textit{Pearson's correlation coefficient}, which is defined as:
+
+\begin{equation}
+\label{eq:pearson_corr}
+	\rho_{X, Y} = \frac{E[(X-\mu_{X})(Y-\mu_{Y})]}{\sigma_X\sigma_Y}
+\end{equation}
+
+The correlation is used to measure dependence between two quantities (variables) $X$ and $Y$ with expected values $\mu_X$ and $\mu_Y$ and standard deviations $\sigma_X$ and $\sigma_Y$. Both value of the standard deviations are finite and nonzero ($0 < \sigma_X< \infty$ and $0 < \sigma_Y < \infty$). One of the impressive properties of the correlation is symmetric measurement, in other words, whichever data comes first, we can still get the same result as measuring. In paper \cite{detection_by_path_analaysis} they propose several methodology algorithms, we report two of them
+\begin{enumerate}
+	\item Correlation between arrival rate and sequence number.
+	Denoted $X$ as a sample set of arrival rate ($X = {\label{_k}}$, where $k=$ 0, 1, 2, ..., N) and $Y$ as a sample set of sequence number ($Y = {k}$  where $k=$ 0, 1, 2, ..., N). Calculate the correlation value $(\rho_{X, Y})$ from the two variables: $X$ and $Y$. The expected value is between $-1$ and $1$, $-1 > \rho_{X, Y} > 1 $.
+	\item Correlation of self arrival rate. Denoted $X$ as a sample sequence of arrival rate ($X = {\lambda_{(2k)}}$, where $k=$ 0, 1, 2, ..., N) and $Y$ as a sequence number of time interval ($Y = {\lambda_{(2k + 1)}}$ where $k=$ 0, 1, 2, ..., N). Calculate the correlation value $(\rho_{X, Y})$ from the two variables: $X$ and $Y$. The expected value is between $-1$ and $1$, $-1 > \rho_{X, Y} > 1 $.
+\end{enumerate}
+In order to use the previous mentioned methodology, \cite{detection_by_path_analaysis} define two thresholds: upper $\tau_U$ and lower $\tau_L$. The value of the upper threshold must not exceed 1 and be less than the lower threshold, on the other hand, the value of the lower threshold must not be below 0 and greater than the upper threshold.
+These thresholds will help to identify the dependency degree of dependency of the arrival rate data into two categories.
+\begin{enumerate}
+	\item \textit{Predictable attack rate}: the data will be classified as a predictable attack rate if the correlation value is closed to 0 or 1.
+	\item \textit{Nonpredictable attack rate}: the data will be classified as a nonpredictable attack rate if the correlation value is not closed to 0 or 1.
+\end{enumerate} 
+Unfortunately, only one correlation result $\rho_{X, Y}$ cannot
+determine whether arrival data is attacking or legitimate, it is
+needed a series of correlation result to confirm the situation.
+The attack detection must respond as quickly as possible after the attack reaches the victim by using these methods, doing an online analysis.
+
+Since we categorise data, using big data framework in order to analyse log files offline, which may contains attacks, we can not use methodology proposed by \cite{detection_by_path_analaysis}. Using big data we elaborate the log files in order to extract features used for our analysis. For simplicity we explain each one by referring to a single entry which represents an exchange between a source IP and server.
 
 \begin{itemize}
 	\item \textit{n\_packets} \\ Represents the amount of packets.
@@ -10,7 +35,8 @@ Based on data volume rates, we do need mathematical models to identify which are
 \end{itemize}
 
 The mathematical model must be able to judge the data by using a threshold, in our case the maximal volume of traffic per second supported by the server under analysis represents this threshold. Other mathematical model are treated in\cite{detection_by_path_analaysis}. 
-This threshold can be estimated by adding an $\alpha$ factor to the mean of volume exchanged during the time of records.
+% TODO rivedere threshold
+This threshold can be represented by an $\alpha$ factor, to the mean of volume exchanged during the time of records.
 
 Using \textit{python} in order to manipulate the results returned by \textit{Pig} we decide to use \textbf{standard deviation} as mathematical model to identify suspicious source address.
 The formula for the sample standard deviation is
@@ -19,4 +45,12 @@ The formula for the sample standard deviation is
 \label{eq:standard_dev}
 	s = \sqrt{\frac{1}{N-1}\sum_{i=1}^N(x_i - \bar{x})^2}
 \end{equation}
-where $x_1, x_2\ ...\ x_n$ are the samples values, $\bar{x}$ is the mean and $N$ is the number of samples in the dataset generated by \textit{Pig-latin} script. We decide to output two plots, \textit{data analysis} which figure out the amount of data, in terms of megabyte, exchanged between a source and the server. \textit{Volume analysis} is like the previous one but represents the data volumes per second exchanged between a source and the server, we use these two plots together to identify the data flow and thanks to these attackers may be detected more easily.
+where $x_1, x_2\ ...\ x_n$ are the samples values, $\bar{x}$ is the mean and $N$ is the number of samples in the dataset generated by \textit{Pig-latin} script.
+
+The standard deviation is a description of the data's spread, how widely it is distributed about the mean.  
+A smaller standard deviation indicates that more of the data is clustered about the mean.  
+A larger one indicates the data are more spread out.
+Using this information, we started to make inferences about the data.  
+For example, we could determine whether a particular point was significantly higher above data volume than all others,  whether it represented a statistical anomaly that was worth investigating, based on how many standard deviations away from the mean it was located.
+
+We decide to output two plots, \textit{data analysis} which figure out the amount of data, in terms of megabyte, exchanged between a source and the server. \textit{Volume analysis} is like the previous one but represents the data volumes per second exchanged between a source and the server, we use these two plots together to identify the data flow and thanks to these attackers may be detected more easily.
