@@ -60,7 +60,7 @@ We can then calculate the number of packets (counting the elements in the bag), 
 This is a crucial factor which we use to discriminate good and evil users. Here below some part of code we wrote for prepare the dataset in order to detect UDP flood attack:
 
 
-\begin{lstlisting}[numbers=left, columns=flexible, breaklines=true, frame=tb, caption={\textit{Udpfloodpcap.pig} script}, label={lst:udpfloodscript}]
+\begin{lstlisting}[numbers=right, columns=flexible, breaklines=true, frame=tb, caption={\textit{Udpfloodpcap.pig} script}, label={lst:udpfloodscript}]
 udpdataset = FILTER dataset BY protocol == 'UDP';
 udpgroup = GROUP udpdataset BY (sourceip, destip);
 
