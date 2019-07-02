@@ -34,7 +34,7 @@ Since we categorise data, using big data framework in order to analyse log files
 	\item \textit{ratio\_vol\_td} \\ Represents the volume over seconds exchanged during the time window.
 \end{itemize}
 
-The mathematical model must be able to judge the data by using a threshold, in our case the maximal volume of traffic per second supported by the server under analysis represents this threshold. Other mathematical model are treated in\cite{detection_by_path_analaysis}. 
+The mathematical model must be able to judge the data by using a thresholds, these ones will be provided by our mathematical tool as we will se further on this sections. Other mathematical model are treated in  \cite{detection_by_path_analaysis} even though we reported the important one. 
 
 Using \textit{python} in order to manipulate the results returned by \textit{Pig} we decide to use \textbf{standard deviation} as graphical guideline model together with the mean and  \textbf{Quantile Range Outliers} method to identify suspicious source address mathematically.
 The formula for the sample standard deviation is
@@ -51,11 +51,11 @@ A larger one indicates the data are more spread out.
 Using this information, we started to make inferences about the data.  
 For example, we could determine whether a particular point was significantly higher above data volume than all others,  whether it represented a statistical anomaly that was worth investigating, based on how many standard deviations away from the mean it was located.
 
-The \textit{quantile range outliers} method of outlier detection uses the quantile distribution of the values in a column to locate the extreme values. Quantiles are useful for detecting outliers because there is no distributional assumption associated with them. Data are simply sorted from smallest to largest. For example, the 20th quantile is the value at which 20\% of values are smaller. Extreme values are found using a multiplier of the interquantile range, the distance between two specified quantiles.
+The \textit{quantile range outliers} method of outlier detection uses the quantile distribution of the values in a column to locate the extreme values. Quantiles are useful for detecting outliers because there is no distributional assumption associated with them. Data are simply sorted from smallest to largest. For example, the $20^{th}$ quantile is the value at which 20\% of values are smaller. Extreme values are found using a multiplier of the interquantile range, the distance between two specified quantiles.
 In statistics and probability \textit{quantiles} are cut points dividing the range of a probability distribution into continuous intervals with equal probabilities, or dividing the observations in a sample in the same way. 
 
 In our work we decide to identify outliers calculating the $25^{th}$ and the $75^{th}$ percentile then we calculate the interquantile rage by doing $Q_{75}-Q_{25}$. We chose $1.5$ as multiplicative $\alpha$ factor for the interquantile. 
-We use this coefficient as \textit{cut off} for determine upper and lower bound for outliers data. 
+We use this coefficient as \textit{cut off} for determine upper and lower bound for outliers data, these will represent our thresholds. 
 The following listing report the code which implements this feature\footnote{In Lst. \ref{lst:qrom} we report only the method applied to data volume exchanged, we do the same for traffic volume (Kb/s)} .
  
  \begin{lstlisting}[numbers=left, columns=flexible, breaklines=true, frame=tb, caption={quantile range outliers method}, label={lst:qrom}]

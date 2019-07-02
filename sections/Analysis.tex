@@ -13,7 +13,6 @@
 	\caption{DoS attack Analysis}
 	\label{fig:dos_analysis}
 \end{figure*}
-
 \section{Analysis}
 \label{sec:analysis}
 In this section we will illustrate the testbed on which we have tested our tool, traffic analysis is mainly based on IP addresses and timestamp \cite{ddos_forensics}. 
@@ -26,11 +25,13 @@ There is also a summary of how to configure and run an analysis with \textit{Pyt
 \subsection{Configuring and Running Analysis}
 This tool has been developed for running analysis over network flow records with minimal effort from the user. Once installed and configured \textit{Hadoop} on your PC or cluster, only one line of code is needed for running and storing the results of an analysis\footnote{Is assumed that the dataset is pre-loaded into the Hadoop file system.}, as shown in the example below
 
-\begin{lstlisting}[firstline=1, lastline=1]
+\begin{lstlisting}[firstline=1, lastline=1, label={lst:start}]
    python3 DDoSAnalysis.py -a dataset_name
 	Write('Case insensitive '); 
 	Write('Bash keywords.')
 \end{lstlisting}
+
+In order to launch the analysis you have set the working directory  in our tool directory, then you can start the analysis simply using the snippet of code up here, for more commands see \S \ref{sec:projstruct}. 
 
 \subsection{Testbed} 
 The created testbed is illustrated in Fig.\ref{fig:networkscenario}, as we can see it is a very simple and basic design scenario. There is a \textit{router} that communicates with \textit{internet},  it connects the \textit{sever} with the global network, as we will see further on the treatment \textit{internet} may contains one or several attackers which aim is to deny the service given by the \textit{server}. 
@@ -47,30 +48,41 @@ We launched our user\footnote{Plots showed in Fig. \ref{fig:dos_analysis} and Fi
 The aim of this testbed is to recreate a valid and realistic simulation of a real scenario in order to verify the reliability of our analysis tool. 
 We do not complicate network structure in order to concentrate our heed on the implementation of analysis tools and big data scripting, which are the main topics of this project.
   
+\begin{figure*}[h]
+	\begin{subfigure}{0.48\textwidth}
+		\includegraphics[width=\textwidth]{imgs/DDoSMixed-data_analysis}
+		\caption{DDoS Data Analysis} 
+		\label{fig:ddos_data}
+	\end{subfigure}
+	\hspace*{\fill} % separation between the subfigures
+	\begin{subfigure}{0.48\textwidth}
+		\includegraphics[width=\textwidth]{imgs/DDoSMixed-volume_analysis}
+		\caption{DDoS Volume Analysis} 
+		\label{fig:ddos_volume}
+	\end{subfigure}
+	\caption{DDoS attack Analysis}
+	\label{fig:ddos_analysis}
+\end{figure*}  
+  
 \subsection{DoS Analysis Example}
 A DoS attack is a common way to saturate the server bandwidth. It's often used in combination with other vulnerabilities to amplificate the DoS traffic volume, as we have seen in the wild with the Memcached vulnerability\cite{memcached_vulnerability}. 
 In our example, Fig. \ref{fig:DoS}, we don't consider the possibility to track the real culprit behind a proxy.
 
 During this simulation we start recording network flow on or server while legitimate users were active, then after more less three thousand, of various type, exchanged packets recorded we start the DoS attack and we register an income flow of 350 Mbps for a few seconds then the server crashes and the income flow decreases but the attacker was still overwhelming the server.
-Standard deviation works well for detecting anomalies in data that is normally distributed, we used it to identify which series deviate greatly from their usual behaviour.
-% TODO DONE descrivere come è stato rilevato attaccante
-Since we don't have a Gaussian distribution of data, the attacker was detected by looking at the \texttt{DoSMixed.csv-report} file, which logs the outliers regarding Data and Traffic, and the produced graph. An outlier is an observation that is unlike the other observations: it is rare, or distinct, or does not fit in some way\cite{outliers}.
-
-\begin{lstlisting}[columns=flexible, breaklines=true, frame=tb, caption={\textit{DoSMixed.csv-report} file}, label={lst:DoSMixed.csv-report}]
-Data outliers (2):
-1    (157.27.157.82,157.27.83.174)-->339397.82
-0    (157.27.83.174,157.27.157.82)-->3619.62
-Traffic outliers:(2):
-1    (157.27.157.82,157.27.83.174)-->2053.8748
-0    (157.27.83.174,157.27.157.82)-->21.895880000000002
-\end{lstlisting}
+Standard deviation works well for detecting anomalies in data that is normally distributed, but since we don't have a Gaussian distribution of data, the attacker was detected using quantile range outliers method. 
+By looking at the \texttt{DoSMixed.csv-report} file Lst. \ref{lst:DoSMixed.csv-report}, which logs the outliers regarding Data and Traffic, our tool figure out the possible attacker IP. An outlier is an observation that is unlike the other observations: it is rare, or distinct, or does not fit in some way\cite{outliers}, in our case a possible attacker.
 
 We can see that the first Data and Traffic outlier corresponds to the highest peak in both graphs: this points out the attacker with the highest probability; the other one is probably a false positive.
+Fig. \ref{fig:dos_analysis} is useful, interpolated with data outliers result, to establish that there is only one attacker, infact the distance from the sigma value is also more accentuated in both graphs for IP whit id 0, which suggests an involvement in the DoS genesis. The suspected false positive may be not involved in the attack by watch its trend in Fig. \ref{fig:dos_analysis}.
 
-%% ------------------------
-We can immediately see in Fig. \ref{fig:dos_analysis} how the attacker with \textit{id 0} is immediately recognised because of a huge amount of traffic volume and a large spike in packet speed. 
-
-Here, in the two graphs, we can see the mean value, represented in a red line: the attacker distance from the sigma value is also more accentuated in both graphs, which suggests an involvement in the DoS genesis.
+\begin{lstlisting}[columns=flexible, breaklines=true, frame=tb, caption={\textit{DoSMixed.csv-report} file}, label={lst:DoSMixed.csv-report}]
+ Data outliers (2):
+1    (157.27.157.82,157.27.83.174)-->339397.82
+0    (157.27.83.174,157.27.157.82)-->3619.62
+ Traffic outliers:(2):
+1    (157.27.157.82,157.27.83.174)-->2053.8748
+0    (157.27.83.174,157.27.157.82)-->21.895880
+\end{lstlisting}
 
 \subsection{DDoS Analysis Example}
 DDoS is a popular approach for attackers to paralyse computers or network systems by coordinating flooding traffic originated from multiple hosts simultaneously, to block legitimate users' system access by reducing resource availability. 
@@ -81,25 +93,21 @@ By using \textit{UDP flood} attack the botmaster unleash his botnet against the 
 During this attack we recorded an income flow of 350-380 Mbps, that is sufficient in order to get down our server, as we have seen in the previous subsection the income flow is more less the same and we empirically suppose that is the upper bound of data which the server\footnote{The server is wireless connected to the network.} can deal with.
 Launching our analysis tool, thanks to its big data features, we are capable to deal with the \texttt{ddos\_log} file easily.
 
-The analysis results are shown in Fig. \ref{fig:ddos_analysis}, as we can see there are two  visible clusters, one of legitimate users and one of attackers. 
-We can easily recognise attackers from legitimate users because the data exchanged in terms of KB is very high (fig. \ref{fig:ddos_data}) like also the traffic generated in therms of KB over seconds is high (fig. \ref{fig:ddos_volume}) respect the average of norma traffic on the server in normal conditions. 
-%% TODO DONE descrivere come sono trovati gli attaccanti usando matematica.
-Like the previous case, the attacker was detected by looking at the \texttt{DDoSMixed.csv-report} file, which logs the outliers regarding Data and Traffic, and the produced graph.
+The analysis results are shown in Fig. \ref{fig:ddos_analysis}, as we can see there is one visible attacker and another in the middle between legitimate users and attackers. 
+We can easily recognise that IP with id 0 is an attacker  because the data exchanged in terms of KB is very high (fig. \ref{fig:ddos_data}) like also the traffic generated in therms of KB over seconds (fig. \ref{fig:ddos_volume}) respect the average of norma traffic on the server in normal conditions. 
+Like the previous case, the attackers were detected by looking at the \texttt{DDoSMixed.csv-report} file Lst. \ref{lst:DDoSMixed.csv-report}, which logs the outliers regarding Data and Traffic.
 
-\begin{lstlisting}[columns=flexible, breaklines=true, frame=tb, caption={\textit{DDoSMixed.csv-report} file}, label={lst:DoSMixed.csv-report}]
-Data outliers (3):
+We can see that the first two Data outlier corresponds to the highest peak in both graphs. In this case, the first outlier reflects the same argument we have made before. For the second one, we observe a lower ratio regarding data exchange, but the velocity is way over the total mean, which is a factor to point out the malign intention, so we can add it to the list of the attackers with high probability. The last one may be a false positive because in both graphs the Data and Traffic corresponding value is below the total mean.
+
+Our tool output also a dataset which contains the IP and all the statistics previously mentioned, in this dataset we can retrive the IP of the attacker by its id which is used to identify it into the output figures. 
+
+\begin{lstlisting}[columns=flexible, breaklines=true, frame=tb, caption={\textit{DDoSMixed.csv-report} file}, label={lst:DDoSMixed.csv-report}]
+ Data outliers (3):
 5    (157.27.133.71,157.27.157.82)-->1265719.06
 1    (157.27.83.174,157.27.157.82)-->147119.52
 0    (157.27.139.1,157.27.157.82)-->21530.056
-Traffic outliers:(3):
+ Traffic outliers (3):
 2    (216.58.205.138,157.27.157.82)-->6061.302
 1    (157.27.83.174,157.27.157.82)-->1525.1005
 0    (157.27.139.1,157.27.157.82)-->242.32861
 \end{lstlisting}
-
-We can see that the first two Data outlier corresponds to the highest peak in both graphs. In this case, the first outlier reflects the same argument we have made before. For the second one, we observe a lower ratio regarding data exchange, but the velocity is way over the total mean, which is a factor to point out the malign intention, so we can add it to the list of the attackers with high probability. The last one is a false positive because in both graphs the Data and Traffic corresponding value is below the total mean.
-
-
-
-%---------------------
-Our tool output also a dataset which contains the IP and all the statistics previously mentioned, in this dataset we can retrive the IP of the attacker by its id which is used to identify it into the output figures. 
