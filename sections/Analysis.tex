@@ -52,8 +52,18 @@ A DoS attack is a common way to saturate the server bandwidth. It's often used i
 In our example, Fig. \ref{fig:DoS}, we don't consider the possibility to track the real culprit behind a proxy.
 
 During this simulation we start recording network flow on or server while legitimate users were active, then after more less three thousand, of various type, exchanged packets recorded we start the DoS attack and we register an income flow of 350 Mbps for a few seconds then the server crashes and the income flow decreases but the attacker was still overwhelming the server.
-Standard deviation works well for detecting anomalies in data that is normally distributed, we used it to identify which series deviate greatly from their usual behaviour ...
-%% TODO descrivere come è stato rilevato attaccante
+Standard deviation works well for detecting anomalies in data that is normally distributed, we used it to identify which series deviate greatly from their usual behaviour.
+% TODO DONE descrivere come Ã¨ stato rilevato attaccante
+Since we don't have a Gaussian distribution of data, the attacker was detected by looking at the \texttt{DoSMixed.csv-report} file, which logs the outliers regarding Data and Traffic, and the produced graph. An outlier is an observation that is unlike the other observations: it is rare, or distinct, or does not fit in some way\cite{outliers}.
+
+\begin{lstlisting}[numbers=left, columns=flexible, breaklines=false, frame=tb, caption={\textit{DoSMixed.csv-report} file}, label={lst:DoSMixed.csv-report}]
+Data outliers (2): [339397.82, 3619.62]
+Traffic outliers:(2): [2053.8748, 21.895880000000002]
+\end{lstlisting}
+
+We can see that the first Data and Traffic outlier corresponds to the highest peak in both graphs: this points out the attacker with the highest probability; the other one is probably a false positive.
+
+%% ------------------------
 We can immediately see in Fig. \ref{fig:dos_analysis} how the attacker with \textit{id 0} is immediately recognised because of a huge amount of traffic volume and a large spike in packet speed. 
 
 Here, in the two graphs, we can see the mean value, represented in a red line: the attacker distance from the sigma value is also more accentuated in both graphs, which suggests an involvement in the DoS genesis.
@@ -69,6 +79,17 @@ Launching our analysis tool, thanks to its big data features, we are capable to 
 
 The analysis results are shown in Fig. \ref{fig:ddos_analysis}, as we can see there are two  visible clusters, one of legitimate users and one of attackers. 
 We can easily recognise attackers from legitimate users because the data exchanged in terms of KB is very high (fig. \ref{fig:ddos_data}) like also the traffic generated in therms of KB over seconds is high (fig. \ref{fig:ddos_volume}) respect the average of norma traffic on the server in normal conditions. 
-%% TODO descrivere come sono trovati gli attaccanti usando matematica.
+%% TODO DONE descrivere come sono trovati gli attaccanti usando matematica.
+Like the previous case, the attacker was detected by looking at the \texttt{DDoSMixed.csv-report} file, which logs the outliers regarding Data and Traffic, and the produced graph.
 
+\begin{lstlisting}[numbers=left, columns=flexible, breaklines=false, frame=tb, caption={\textit{DDoSMixed.csv-report} file}, label={lst:DoSMixed.csv-report}]
+Data outliers (3): [1265719.06, 147119.52, 21530.056]
+Traffic outliers:(3): [6061.302, 1525.1005, 242.32861]
+\end{lstlisting}
+
+We can see that the first two Data outlier corresponds to the highest peak in both graphs. In this case, the first outlier reflects the same argument we have made before. For the second one, we observe a lower ratio regarding data exchange, but the velocity is way over the total mean, which is a factor to point out the malign intention, so we can add it to the list of the attackers with high probability. The last one is a false positive because in both graphs the Data and Traffic corresponding value is below the total mean.
+
+
+
+%---------------------
 Our tool output also a dataset which contains the IP and all the statistics previously mentioned, in this dataset we can retrive the IP of the attacker by its id which is used to identify it into the output figures. 

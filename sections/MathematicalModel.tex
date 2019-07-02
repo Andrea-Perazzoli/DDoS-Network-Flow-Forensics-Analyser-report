@@ -36,6 +36,7 @@ Since we categorise data, using big data framework in order to analyse log files
 
 The mathematical model must be able to judge the data by using a threshold, in our case the maximal volume of traffic per second supported by the server under analysis represents this threshold. Other mathematical model are treated in\cite{detection_by_path_analaysis}. 
 % TODO rivedere threshold
+%%-------
 This threshold can be represented by an $\alpha$ factor, to the mean of volume exchanged during the time of records.
 
 Using \textit{python} in order to manipulate the results returned by \textit{Pig} we decide to use \textbf{standard deviation} as mathematical model to identify suspicious source address.
