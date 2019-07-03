@@ -12,7 +12,7 @@ Using our script called \texttt{PerformanceAnalysis.py} we managed to plot the t
 	\caption{Performance Analysis} 
 	\label{fig:analysis_stats}
 \end{figure}
-In \textbf{Tab. \ref{tab:dataset_info}} we show a summary of the dimension of the datasets we have used in our analysis. Both the \textit{LegitimateTraffic} and \textit{DoSMixed} datasets were completed in approximately 1 minute and 40 seconds. \textit{DDosMixed} was completed in 2 minutes and 17 seconds, but it's not a noticeable increment, considering the fact that it's way bigger. This justifies the parallel approach we have used with \textbf{Pig Latin}.
+In \textbf{Tab. \ref{tab:dataset_info}} we show a summary of the dimension of the datasets we have used in our analysis. Both the \textit{LegitimateTraffic} and \textit{DoSMixed} datasets were completed in approximately 1 minute and 40 seconds. \textit{DDoSMixed} was completed in 2 minutes and 17 seconds, but it's not a noticeable increment, considering the fact that it's way bigger. This justifies the parallel approach we have used with \textbf{Pig Latin}.
 
 \begin{table}[!htbp]
 \centering
@@ -26,3 +26,6 @@ DDoSMixed        & Traffic log during a DDoS attack. & 612 MB        \\ \hline
 \caption{Datasets Info}
 \label{tab:dataset_info}
 \end{table}
+
+Looking at our job stats, we have noticed that for the \textit{LegitimateTraffic} the average reduce time is zero, and for the other two datasets the average map time exceeds the reduce one.
+
